@@ -1,3 +1,14 @@
+// ========== HAMBURGER MENU ==========
+function toggleMenu() {
+    const nav = document.getElementById('nav');
+    nav.classList.toggle('open');
+}
+
+function closeMenu() {
+    const nav = document.getElementById('nav');
+    nav.classList.remove('open');
+}
+
 // ========== SUPABASE CONFIG ==========
 const SUPABASE_URL = 'https://rifzojimhpquxsipitmk.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnpvamltaHBxdXhzaXBpdG1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMDc2NTIsImV4cCI6MjA4ODc4MzY1Mn0.O3ed2xyVFOoBZ6BIKnBysHXAsSXjH2f5RC2B7tApuQc';
