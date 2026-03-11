@@ -10,14 +10,17 @@
     <!-- HEADER -->
     <header>
         <div class="logo" onclick="showPage('home')">Baffo Restaurant</div>
+        <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+            <span></span><span></span><span></span>
+        </button>
         <nav id="nav">
-            <a onclick="showPage('home')">HOME</a>
-            <a onclick="showPage('menu')">MENU</a>
-            <a onclick="showPage('order')">ORDER</a>
-            <a onclick="showPage('reserve')">RESERVE</a>
-            <a onclick="showPage('about')">ABOUT</a>
-            <a id="adminLink" onclick="showPage('admin')" style="display: none; color: var(--accent);">ADMIN</a>
-            <button id="cartBtn" onclick="showPage('cart')" style="display:none; position:relative; width:auto; padding: 0.5rem 1rem;">
+            <a onclick="showPage('home'); closeMenu()">HOME</a>
+            <a onclick="showPage('menu'); closeMenu()">MENU</a>
+            <a onclick="showPage('order'); closeMenu()">ORDER</a>
+            <a onclick="showPage('reserve'); closeMenu()">RESERVE</a>
+            <a onclick="showPage('about'); closeMenu()">ABOUT</a>
+            <a id="adminLink" onclick="showPage('admin'); closeMenu()" style="display: none; color: var(--accent);">ADMIN</a>
+            <button id="cartBtn" onclick="showPage('cart'); closeMenu()" style="display:none; position:relative; width:auto; padding: 0.5rem 1rem;">
                 🛒 Cart <span id="cartCount" class="cart-badge">0</span>
             </button>
             <button id="authBtn" onclick="toggleAuth()">LOG IN</button>
