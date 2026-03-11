@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baffo Restaurant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo" onclick="showPage('home')">Baffo Restaurant</div>
+        <nav id="nav">
+            <a onclick="showPage('home')">HOME</a>
+            <a onclick="showPage('menu')">MENU</a>
+            <a onclick="showPage('order')">ORDER</a>
+            <a onclick="showPage('reserve')">RESERVE</a>
+            <a onclick="showPage('about')">ABOUT</a>
+            <a id="adminLink" onclick="showPage('admin')" style="display: none; color: var(--accent);">ADMIN</a>
+            <button id="cartBtn" onclick="showPage('cart')" style="display:none; position:relative; width:auto; padding: 0.5rem 1rem;">
+                🛒 Cart <span id="cartCount" class="cart-badge">0</span>
+            </button>
+            <button id="authBtn" onclick="toggleAuth()">LOG IN</button>
+        </nav>
+    </header>
+
+    <!-- ============== LOGIN PAGE ============== -->
+    <div id="login" class="page active">
+        <div class="container">
+            <div class="form-container" style="margin-top: 3rem;">
+                <h2>LOG IN</h2>
+                <div id="loginError" class="error-message"></div>
+                <div class="form-group">
+                    <label for="loginUsername">USERNAME:</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">PASSWORD:</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button onclick="handleLogin()">LOG IN</button>
+                <div class="form-center">
+                    <a onclick="showPage('signup')">Don't have an account? CLICK ME</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== SIGN UP PAGE ============== -->
+    <div id="signup" class="page">
+        <div class="container">
+            <div class="form-container" style="margin-top: 3rem;">
+                <h2>SIGN UP</h2>
+                <div id="signupError" class="error-message"></div>
+                <div class="form-group">
+                    <label for="signupUsername">USERNAME:</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="signupAddress">ADDRESS:</label>
+                    <input type="text" id="signupAddress" placeholder="Enter your address">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">PASSWORD:</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">CONFIRM PASSWORD:</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                </div>
+                <button onclick="handleSignup()">SIGN UP</button>
+                <div class="form-center">
+                    <a onclick="showPage('login')">Already have an account? CLICK ME</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== HOME PAGE ============== -->
+    <div id="home" class="page">
+        <div class="container">
+            <div class="hero">
+                <h1>Welcome to Baffo Restaurant</h1>
+                <p>Where great food meets a warm and cozy atmosphere. Explore our delicious menu, discover our chef's specialties, and enjoy a dining experience made with fresh ingredients and passion.</p>
+                <button onclick="showPage('order')" style="width:auto; padding: 0.75rem 2.5rem; font-size:1.1rem; margin-top:1rem;">🛒 Order Now</button>
+            </div>
+            <div class="grid-2">
+                <div class="info-box">
+                    <h2>🍽️ Featured Dishes</h2>
+                    <p>One of the best dishes in Baffo Restaurant's menu:</p>
+                    <ul>
+                        <li>Roast Leg of Lamb with herbs</li>
+                        <li>Zumbo's signature desserts</li>
+                        <li>Fresh pasta preparations</li>
+                        <li>Grilled specialties</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h2>🌟 Why Visit Us</h2>
+                    <ul>
+                        <li>Freshly prepared meals</li>
+                        <li>High-quality ingredients</li>
+                        <li>Cozy and modern atmosphere</li>
+                        <li>Friendly and accommodating staff</li>
+                        <li>Affordable prices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== MENU PAGE ============== -->
+    <div id="menu" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">Our Menu</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Carefully crafted dishes made with the finest ingredients</p>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+    </div>
+
+    <!-- ============== ORDER PAGE ============== -->
+    <div id="order" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">🛒 Order Food</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">Add items to your cart and place your order</p>
+            <div class="menu-grid" id="orderGrid"></div>
+        </div>
+    </div>
+
+    <!-- ============== CART PAGE ============== -->
+    <div id="cart" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">🧾 Your Cart</h1>
+
+            <div class="grid-2">
+                <!-- Cart Items -->
+                <div class="info-box">
+                    <h2>Items</h2>
+                    <div id="cartItemsList"></div>
+                    <div id="cartTotal" style="margin-top:1.5rem; font-size:1.4rem; font-weight:bold; color:var(--accent); text-align:right;"></div>
+                </div>
+
+                <!-- Checkout Form -->
+                <div class="form-container" style="max-width:100%;">
+                    <h2>Checkout</h2>
+                    <div id="checkoutError" class="error-message"></div>
+                    <div id="checkoutSuccess" class="success-message">✅ Order placed successfully!</div>
+
+                    <div class="form-group">
+                        <label>ORDER TYPE:</label>
+                        <select id="orderType">
+                            <option value="delivery">🚚 Delivery</option>
+                            <option value="pickup">🏠 Pickup</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="deliveryAddressGroup">
+                        <label>DELIVERY ADDRESS:</label>
+                        <input type="text" id="deliveryAddress" placeholder="Enter delivery address">
+                    </div>
+                    <div class="form-group">
+                        <label>PHONE NUMBER:</label>
+                        <input type="text" id="phoneNumber" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>SPECIAL INSTRUCTIONS (OPTIONAL):</label>
+                        <textarea id="specialInstructions" rows="3" placeholder="Any special requests..."></textarea>
+                    </div>
+                    <button onclick="placeOrder()">PLACE ORDER</button>
+                </div>
+            </div>
+
+            <!-- My Orders -->
+            <div class="info-box" style="margin-top:2rem;">
+                <h2>📦 My Orders</h2>
+                <div id="myOrdersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== RESERVATION PAGE ============== -->
+    <div id="reserve" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">Table Booking</h1>
+            <div class="grid-2">
+                <div class="form-container">
+                    <h2>Make a Reservation</h2>
+                    <div id="reserveError" class="error-message"></div>
+                    <div id="reserveSuccess" class="success-message">Booking Complete! ✓</div>
+                    <div class="form-group">
+                        <label for="numPeople">NUMBER OF PEOPLE:</label>
+                        <input type="number" id="numPeople" min="1" max="20" placeholder="1-20 people">
+                    </div>
+                    <div class="form-group">
+                        <label for="reserveDate">DATE:</label>
+                        <input type="date" id="reserveDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="reserveTime">TIME:</label>
+                        <input type="time" id="reserveTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="reserveComment">COMMENT (OPTIONAL):</label>
+                        <textarea id="reserveComment" rows="3" placeholder="Special requests or notes..."></textarea>
+                    </div>
+                    <button onclick="handleReservation()">SUBMIT</button>
+                </div>
+                <div class="info-box">
+                    <h2>Your Reservations</h2>
+                    <div id="reservationsList" style="color: #999; text-align: center; padding: 2rem;">
+                        No reservations yet. Make one to get started!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== ABOUT PAGE ============== -->
+    <div id="about" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">About Baffo Restaurant</h1>
+            <div class="info-box" style="margin-bottom: 2rem;">
+                <p style="font-size: 1.1rem; color: #555; line-height: 1.8;">
+                    Baffo Restaurant is a welcoming dining destination known for its delicious food, cozy atmosphere, and excellent customer service. We take pride in serving freshly prepared meals made from high-quality ingredients to ensure every guest enjoys a satisfying and memorable experience.
+                </p>
+            </div>
+            <div class="about-section">
+                <div>
+                    <h2>🌟 Our Mission</h2>
+                    <p>To provide affordable, flavorful, and high-quality dishes while creating a warm and comfortable space where families and friends can gather and enjoy great food together.</p>
+                </div>
+                <div>
+                    <h2>💖 Why Choose Baffo?</h2>
+                    <ul>
+                        <li>Friendly and accommodating staff</li>
+                        <li>Affordable prices</li>
+                        <li>Clean and comfortable dining area</li>
+                        <li>Freshly cooked meals</li>
+                        <li>Great taste and quality service</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><em>"We don't just serve food — we serve happiness on every plate."</em></p>
+                </div>
+            </div>
+            <h2 style="color: var(--primary); margin-top: 3rem; margin-bottom: 1rem;">🍽️ Our Specialties</h2>
+            <div class="specialties-grid">
+                <div class="specialty-card"><h3>Classic Pasta & Italian Meals</h3><p>Authentic recipes prepared with traditional techniques.</p></div>
+                <div class="specialty-card"><h3>Grilled Specialties</h3><p>Perfectly cooked meats and seafood grilled to your preference.</p></div>
+                <div class="specialty-card"><h3>Fresh Salads & Appetizers</h3><p>Light, refreshing starters made with seasonal produce.</p></div>
+                <div class="specialty-card"><h3>Signature Desserts</h3><p>Indulgent sweet endings crafted by our pastry chefs.</p></div>
+                <div class="specialty-card"><h3>Refreshing Beverages</h3><p>Carefully selected wines, sodas, and specialty drinks.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== ADMIN PAGE ============== -->
+    <div id="admin" class="page">
+        <div class="container">
+            <h1 style="color: var(--primary); text-align: center; margin: 2rem 0;">🔐 Admin Dashboard</h1>
+            <div id="adminMessage" class="admin-message"></div>
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number" id="totalUsers">0</div>
+                    <div class="label">Total Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="totalReservations">0</div>
+                    <div class="label">All Reservations</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="totalMenuItems">0</div>
+                    <div class="label">Menu Items</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="totalOrders">0</div>
+                    <div class="label">Total Orders</div>
+                </div>
+            </div>
+
+            <div class="admin-dashboard">
+                <!-- MANAGE USERS -->
+                <div class="admin-card">
+                    <h2>👥 Manage Users</h2>
+                    <table class="admin-table">
+                        <thead><tr><th>Username</th><th>Address</th><th>Role</th><th>Action</th></tr></thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- MANAGE MENU -->
+                <div class="admin-card">
+                    <h2>🍽️ Manage Menu</h2>
+                    <div class="menu-form">
+                        <input type="text" id="menuName" placeholder="Dish Name" style="width:100%;">
+                        <textarea id="menuDesc" placeholder="Description" rows="2" style="width:100%;"></textarea>
+                        <div class="form-row">
+                            <input type="number" id="menuPrice" placeholder="Price" min="0" step="0.01">
+                            <button onclick="addMenuItemAdmin()" style="width:100%;">Add Item</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Name</th><th>Price</th><th>Action</th></tr></thead>
+                        <tbody id="menuTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- ALL RESERVATIONS -->
+                <div class="admin-card" style="grid-column: 1 / -1;">
+                    <h2>📅 All Reservations</h2>
+                    <table class="admin-table">
+                        <thead><tr><th>User</th><th>Date</th><th>Time</th><th>People</th><th>Comment</th><th>Action</th></tr></thead>
+                        <tbody id="allReservationsBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- ALL ORDERS -->
+                <div class="admin-card" style="grid-column: 1 / -1;">
+                    <h2>📦 All Orders</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Type</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Instructions</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allOrdersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2024 Baffo Restaurant. All rights reserved. | Serving happiness on every plate. 🍽️</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
