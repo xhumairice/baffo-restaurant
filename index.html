@@ -345,6 +345,25 @@
         <p>&copy; 2026 Baffo Restaurant by Rian. All rights reserved. | Serving happiness on every plate. 🍽️</p>
     </footer>
 
+    <!-- ===== ORDER COMPLETE DIALOG ===== -->
+    <div id="orderCompleteDialog" class="order-complete-dialog" aria-live="polite">
+        <div class="order-complete-inner">
+            <div class="order-complete-check">✔</div>
+            <div class="order-complete-text">Order Complete!</div>
+        </div>
+    </div>
+
+    <!-- ===== CONFIRM MODAL ===== -->
+    <div id="confirmModal" class="confirm-modal-overlay" role="dialog" aria-modal="true">
+        <div class="confirm-modal-box">
+            <p id="confirmModalMessage" class="confirm-modal-msg"></p>
+            <div class="confirm-modal-actions">
+                <button id="confirmYesBtn" class="confirm-btn confirm-yes">Yes, Delete</button>
+                <button id="confirmCancelBtn" class="confirm-btn confirm-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
