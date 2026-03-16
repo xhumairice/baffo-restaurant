@@ -322,8 +322,7 @@ async function placeOrder() {
         document.getElementById('deliveryAddress').value = '';
         document.getElementById('specialInstructions').value = '';
 
-        successDiv.classList.add('show');
-        setTimeout(() => successDiv.classList.remove('show'), 4000);
+        showOrderComplete();
         loadCartPage();
 
     } catch (err) {
@@ -423,7 +422,7 @@ async function updateReservationsList() {
 }
 
 async function deleteReservation(id) {
-    if (confirm('Cancel this reservation?')) {
+    if (await showConfirm('Are you sure you want to cancel this reservation?')) {
         await fetch(`${SUPABASE_URL}/rest/v1/reservations?id=eq.${id}`, { method: 'DELETE', headers });
         updateReservationsList();
     }
@@ -528,7 +527,7 @@ async function updateOrderStatus(id, status) {
 }
 
 async function deleteOrder(id) {
-    if (confirm('Delete this order?')) {
+    if (await showConfirm('Are you sure you want to delete this order?')) {
         await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${id}`, { method: 'DELETE', headers });
         loadAdminDashboard();
     }
@@ -561,7 +560,7 @@ async function addMenuItemAdmin() {
 }
 
 async function deleteMenuItem(id) {
-    if (confirm('Delete this menu item?')) {
+    if (await showConfirm('Are you sure you want to delete this menu item?')) {
         await fetch(`${SUPABASE_URL}/rest/v1/menu_items?id=eq.${id}`, { method: 'DELETE', headers });
         loadAdminDashboard();
     }
@@ -569,14 +568,14 @@ async function deleteMenuItem(id) {
 
 async function deleteUser(username) {
     if (username === 'admin') { alert('Cannot delete the admin account!'); return; }
-    if (confirm(`Delete user "${username}"?`)) {
+    if (await showConfirm(`Are you sure you want to delete user "${username}"?`)) {
         await fetch(`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`, { method: 'DELETE', headers });
         loadAdminDashboard();
     }
 }
 
 async function deleteReservationAdmin(id) {
-    if (confirm('Delete this reservation?')) {
+    if (await showConfirm('Are you sure you want to delete this reservation?')) {
         await fetch(`${SUPABASE_URL}/rest/v1/reservations?id=eq.${id}`, { method: 'DELETE', headers });
         loadAdminDashboard();
     }
@@ -591,6 +590,38 @@ function showError(element, message) {
 function formatDate(dateString) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+/* Show the "Order Complete!" centered dialog for 2 seconds */
+function showOrderComplete() {
+    const dlg = document.getElementById('orderCompleteDialog');
+    dlg.classList.add('show');
+    setTimeout(() => dlg.classList.remove('show'), 2000);
+}
+
+/* Custom confirm modal — returns a Promise<boolean> */
+function showConfirm(message) {
+    return new Promise(resolve => {
+        const overlay = document.getElementById('confirmModal');
+        const msgEl   = document.getElementById('confirmModalMessage');
+        const yesBtn  = document.getElementById('confirmYesBtn');
+        const noBtn   = document.getElementById('confirmCancelBtn');
+
+        msgEl.textContent = message;
+        overlay.classList.add('show');
+
+        function cleanup(result) {
+            overlay.classList.remove('show');
+            yesBtn.removeEventListener('click', onYes);
+            noBtn.removeEventListener('click', onNo);
+            resolve(result);
+        }
+        function onYes() { cleanup(true); }
+        function onNo()  { cleanup(false); }
+
+        yesBtn.addEventListener('click', onYes);
+        noBtn.addEventListener('click', onNo);
+    });
 }
 
 // ========== INIT ==========
